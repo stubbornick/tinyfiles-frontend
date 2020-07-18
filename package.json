@@ -1,7 +1,10 @@
 {
-  "name": "frontend",
-  "version": "0.1.0",
+  "name": "tinyfiles-frontend",
+  "version": "0.0.1",
+  "description": "TinyFiles - backend",
+  "author": "stubbornick",
   "private": true,
+  "license": "UNLICENSED",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
