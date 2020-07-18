@@ -1,7 +1,7 @@
 {
   "name": "tinyfiles-frontend",
   "version": "0.0.1",
-  "description": "TinyFiles - backend",
+  "description": "Tinyfiles - backend",
   "author": "stubbornick",
   "private": true,
   "license": "UNLICENSED",
@@ -13,6 +13,7 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
+    "bootstrap": "^4.5.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
