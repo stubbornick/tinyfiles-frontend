@@ -1,6 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import FileModule from './FileModule';
 
 function App() {
   return (
@@ -8,6 +9,8 @@ function App() {
       <header className="border-bottom">
         <h1>Tinyfiles</h1>
       </header>
+
+      <FileModule />
 
       <footer className="pt-2 my-md-3 pt-md-3 border-top">
         <div className="container">
@@ -20,15 +23,15 @@ function App() {
                 <h5>About</h5>
                 <ul className="list-unstyled text-muted">
                   <li>
-                    Powered by
+                    Powered by&nbsp;
                     <a href="https://getbootstrap.com" title="Bootstrap">Bootstrap</a>
                   </li>
                   <li>
-                    Icon made by
+                    Icon made by&nbsp;
                     <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a>
                   </li>
                   <li>
-                    App made by
+                    App made by&nbsp;
                     <a href="https://github.com/stubbornick" title="stubbornick">stubbornick</a>
                   </li>
                 </ul>
