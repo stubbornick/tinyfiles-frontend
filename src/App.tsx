@@ -20,12 +20,16 @@ function App() {
                 <h5>About</h5>
                 <ul className="list-unstyled text-muted">
                   <li>
+                    Powered by
+                    <a href="https://getbootstrap.com" title="Bootstrap">Bootstrap</a>
+                  </li>
+                  <li>
                     Icon made by
-                    <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a>.
+                    <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a>
                   </li>
                   <li>
                     App made by
-                    <a href="https://github.com/stubbornick" title="stubbornick">stubbornick</a>.
+                    <a href="https://github.com/stubbornick" title="stubbornick">stubbornick</a>
                   </li>
                 </ul>
             </div>
