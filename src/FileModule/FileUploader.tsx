@@ -1,7 +1,7 @@
 import React from 'react';
 import { PlusCircle } from 'react-feather';
 import api from '../api';
-import { File, FileHandler } from '../types';
+import { FileHandler } from '../types';
 
 interface Props {
   newFileHandler: FileHandler
