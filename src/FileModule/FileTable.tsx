@@ -2,9 +2,9 @@ import React from 'react';
 import readableFileSize from 'filesize';
 import { Download } from 'react-feather';
 import './FileModule.css';
-import { File } from '../types';
+import { File, FileHandler } from '../types';
 
-const renderFileRaw = (file: File) => {
+const renderFileRaw = (file: File, deleteFile: FileHandler) => {
   return (
     <tr key={file.id}>
       <td>{file.name}</td>
@@ -16,7 +16,12 @@ const renderFileRaw = (file: File) => {
           Download
         </button>
         <button className="btn btn-inline btn-outline-secondary">Rename</button>
-        <button className="btn btn-inline btn-outline-danger">Delete</button>
+        <button
+          className="btn btn-inline btn-outline-danger"
+          onClick={() => deleteFile(file)}
+        >
+          Delete
+        </button>
       </td>
     </tr>
   );
@@ -32,10 +37,10 @@ const renderMessageRaw = (message: string) => {
   )
 }
 
-const renderFilesTable = (files: File[], fetched: boolean) => {
-  if (fetched) {
-    if (files.length > 0) {
-      return files.map((file) => renderFileRaw(file));
+const renderFilesTable = (props: Props) => {
+  if (props.fetched) {
+    if (props.files.length > 0) {
+      return props.files.map((file) => renderFileRaw(file, props.deleteFile));
     }
 
     return renderMessageRaw("There is no uploaded files yet");
@@ -46,10 +51,11 @@ const renderFilesTable = (files: File[], fetched: boolean) => {
 
 interface Props {
   files: File[],
-  fetched: boolean
+  fetched: boolean,
+  deleteFile: FileHandler
 }
 
-export default function FileTable({ files, fetched }: Props) {
+export default function FileTable(props: Props) {
   return (
     <div className="table-responsive border rounded">
       <table className="table table-hover table-sm mb-0">
@@ -62,7 +68,7 @@ export default function FileTable({ files, fetched }: Props) {
           </tr>
         </thead>
         <tbody>
-          {renderFilesTable(files, fetched)}
+          {renderFilesTable(props)}
         </tbody>
       </table>
     </div>

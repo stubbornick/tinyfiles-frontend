@@ -3,3 +3,5 @@ export interface File {
   name: string,
   size: number
 }
+
+export declare type FileHandler = (file: File) => void;

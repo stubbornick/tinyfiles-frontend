@@ -23,10 +23,6 @@ function App() {
                 <h5>About</h5>
                 <ul className="list-unstyled text-muted">
                   <li>
-                    Powered by&nbsp;
-                    <a href="https://getbootstrap.com" title="Bootstrap">Bootstrap</a>
-                  </li>
-                  <li>
                     Icon made by&nbsp;
                     <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a>
                   </li>
