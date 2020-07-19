@@ -21,6 +21,10 @@ export default class FileUploader extends React.Component<Props, State> {
     console.log('UPLOAD', this.state.selectedFile);
   };
 
+  private selectFileForUpload = () => {
+    this.fileInput.current?.click();
+  };
+
   private onFileChange = (event: any) => {
     console.log('FILE CHANGE', event.target.files[0]);
     this.setState({ selectedFile: event.target.files[0] });
@@ -28,17 +32,15 @@ export default class FileUploader extends React.Component<Props, State> {
 
   render() {
     return (
-      <div className="d-inline-flex">
+      <div className="d-flex">
         <input
           type="file"
           className="d-none"
           onChange={this.onFileChange}
           ref={this.fileInput}
         />
-        <button className="btn btn-inline" onClick={() => {
-          this.fileInput.current?.click();
-        }}>
-          <PlusCircle />
+        <button className="btn btn-inline btn-outline-secondary" onClick={this.selectFileForUpload}>
+          <PlusCircle size={18} />
         </button>
       </div>
     );

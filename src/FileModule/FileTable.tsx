@@ -6,13 +6,13 @@ import { File } from '../types';
 
 const renderFileRaw = (file: File) => {
   return (
-    <tr>
+    <tr key={file.id}>
       <td>{file.name}</td>
       <td>{file.id}</td>
       <td>{readableFileSize(file.size)}</td>
       <td>
         <button className="btn btn-inline btn-outline-secondary">
-          <span><Download /></span>
+          <Download />
           Download
         </button>
         <button className="btn btn-inline btn-outline-secondary">Rename</button>
@@ -22,29 +22,34 @@ const renderFileRaw = (file: File) => {
   );
 }
 
-const renderEmptyRaw = () => {
+const renderMessageRaw = (message: string) => {
   return (
     <tr className="text-center">
       <td colSpan={4}>
-        There is no uploaded files yet
+        {message}
       </td>
     </tr>
   )
 }
 
-const renderFilesTable = (files: File[]) => {
-  if (files.length > 0) {
-    return files.map((file) => renderFileRaw(file));
+const renderFilesTable = (files: File[], fetched: boolean) => {
+  if (fetched) {
+    if (files.length > 0) {
+      return files.map((file) => renderFileRaw(file));
+    }
+
+    return renderMessageRaw("There is no uploaded files yet");
   }
 
-  return renderEmptyRaw();
+  return renderMessageRaw("Loading data...");
 }
 
 interface Props {
-  files: File[]
+  files: File[],
+  fetched: boolean
 }
 
-export default function FileTable({ files }: Props) {
+export default function FileTable({ files, fetched }: Props) {
   return (
     <div className="table-responsive border rounded">
       <table className="table table-hover table-sm mb-0">
@@ -57,7 +62,7 @@ export default function FileTable({ files }: Props) {
           </tr>
         </thead>
         <tbody>
-          {renderFilesTable(files)}
+          {renderFilesTable(files, fetched)}
         </tbody>
       </table>
     </div>
