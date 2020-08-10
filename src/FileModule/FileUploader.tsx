@@ -38,12 +38,27 @@ export default class FileUploader extends React.Component<Props, State> {
   };
 
   private uploadFile = async () => {
-    const result = await api.post('/files', {
-      name: this.state.selectedFile.name
+    const file = this.state.selectedFile;
+    const createResponse = await api.post('/files', {
+      name: file.name,
+      size: file.size,
     });
 
-    if (result.status === 201) {
-      this.newFileHandler(result.data);
+    if (createResponse.status === 201) {
+      const file = this.state.selectedFile;
+      const newFileId = createResponse.data.id;
+      const uploadResult = await api.patch(
+        `/files/upload/${newFileId}`,
+        file,
+        {
+          headers: {
+            'Content-Type': 'text/octet-stream',
+          }
+        }
+      );
+      if (uploadResult.status === 200) {
+        this.newFileHandler(createResponse.data);
+      }
     }
   }
 
