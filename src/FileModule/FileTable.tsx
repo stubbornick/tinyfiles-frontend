@@ -1,7 +1,8 @@
 import React from 'react';
 import readableFileSize from 'filesize';
-import { Download } from 'react-feather';
+import { Download as DownloadIcon } from 'react-feather';
 import './FileModule.css';
+import { getDownloadLink } from '../api';
 import { File, FileHandler } from '../types';
 
 const renderFileRaw = (file: File, deleteFile: FileHandler) => {
@@ -12,8 +13,10 @@ const renderFileRaw = (file: File, deleteFile: FileHandler) => {
       <td>{readableFileSize(file.size)}</td>
       <td>
         <button className="btn btn-inline btn-outline-secondary">
-          <Download />
-          Download
+          <a href={getDownloadLink(file.id, file.name)}>
+            <DownloadIcon />
+            Download
+          </a>
         </button>
         <button className="btn btn-inline btn-outline-secondary">Rename</button>
         <button
