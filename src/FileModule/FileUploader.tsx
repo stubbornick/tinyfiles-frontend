@@ -3,6 +3,8 @@ import { PlusCircle } from 'react-feather';
 import api from '../api';
 import { FileHandler } from '../types';
 
+const UPLOAD_CHUNK_SIZE = 1024*1024*10; // 10mb
+
 interface Props {
   newFileHandler: FileHandler
 }
@@ -39,26 +41,35 @@ export default class FileUploader extends React.Component<Props, State> {
 
   private uploadFile = async () => {
     const file = this.state.selectedFile;
+
     const createResponse = await api.post('/files', {
       name: file.name,
       size: file.size,
     });
 
     if (createResponse.status === 201) {
-      const file = this.state.selectedFile;
       const newFileId = createResponse.data.id;
-      const uploadResult = await api.patch(
-        `/files/upload/${newFileId}`,
-        file,
-        {
-          headers: {
-            'Content-Type': 'text/octet-stream',
+
+      for (let pos = 0; pos < file.size; pos += UPLOAD_CHUNK_SIZE) {
+        const end = Math.min(file.size, pos + UPLOAD_CHUNK_SIZE);
+        console.log("POS", pos, "OF", end)
+        const res = await api.patch(
+          `/files/upload/${newFileId}`,
+          file.slice(pos, end),
+          {
+            headers: {
+              'Content-Type': 'text/octet-stream',
+            },
           }
+        );
+
+        if (res.status !== 200) {
+          console.error("Bad answer from server while uploading:", res)
+          return;
         }
-      );
-      if (uploadResult.status === 200) {
-        this.newFileHandler(createResponse.data);
       }
+
+      this.newFileHandler(createResponse.data);
     }
   }
 
