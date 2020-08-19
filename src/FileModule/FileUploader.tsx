@@ -3,7 +3,21 @@ import { PlusCircle } from 'react-feather';
 import api from '../api';
 import { FileHandler } from '../types';
 
-const UPLOAD_CHUNK_SIZE = 1024*1024*10; // 10mb
+const MIN_UPLOAD_CHUNK_SIZE = 1024*50 // 50kb
+const MAX_UPLOAD_CHUNK_SIZE = 1024*1024*50 // 50mb
+const MIN_REQUEST_TIME = 3
+const MAX_REQUEST_TIME = 10
+
+let uploadChunkSize = 1024*200; // 200kb
+
+const adjustChunkSize = (requestStartTime: number) => {
+  const requestTime = (Date.now() - requestStartTime) / 1000;
+  if (requestTime > MAX_REQUEST_TIME && uploadChunkSize > MIN_UPLOAD_CHUNK_SIZE) {
+    uploadChunkSize = uploadChunkSize / 2;
+  } else if (requestTime < MIN_REQUEST_TIME && uploadChunkSize < MAX_UPLOAD_CHUNK_SIZE) {
+    uploadChunkSize = uploadChunkSize * 2;
+  }
+}
 
 interface Props {
   newFileHandler: FileHandler
@@ -50,12 +64,15 @@ export default class FileUploader extends React.Component<Props, State> {
     if (createResponse.status === 201) {
       const newFileId = createResponse.data.id;
 
-      for (let pos = 0; pos < file.size; pos += UPLOAD_CHUNK_SIZE) {
-        const end = Math.min(file.size, pos + UPLOAD_CHUNK_SIZE);
-        console.log("POS", pos, "OF", end)
+      for (let chunkFrom = 0; chunkFrom < file.size;) {
+        const currentChunkSize = Math.min(file.size - chunkFrom, uploadChunkSize);
+        const chunkTo = chunkFrom + currentChunkSize;
+
+        const requestStartTime = Date.now();
+
         const res = await api.patch(
           `/files/upload/${newFileId}`,
-          file.slice(pos, end),
+          file.slice(chunkFrom, chunkTo),
           {
             headers: {
               'Content-Type': 'text/octet-stream',
@@ -66,6 +83,12 @@ export default class FileUploader extends React.Component<Props, State> {
         if (res.status !== 200) {
           console.error("Bad answer from server while uploading:", res)
           return;
+        }
+
+        chunkFrom = chunkTo;
+
+        if (currentChunkSize === uploadChunkSize) {
+          adjustChunkSize(requestStartTime)
         }
       }
 
