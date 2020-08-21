@@ -1,2 +1,1 @@
-import FileModule from './FileModule';
-export default FileModule;
+export { FileModule } from './FileModule';

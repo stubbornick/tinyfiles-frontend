@@ -1,7 +1,9 @@
-export interface File {
+export interface FileInterface {
   id: string,
   name: string,
-  size: number
+  size: number,
+  uploadedSize?: number,
+  uploadedAt?: Date,
 }
 
-export declare type FileHandler = (file: File) => void;
+export interface NoProps {}

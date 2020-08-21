@@ -1,11 +1,12 @@
 import React from 'react';
 import readableFileSize from 'filesize';
 import { Download as DownloadIcon } from 'react-feather';
-import './FileModule.css';
-import { getDownloadLink } from '../api';
-import { File, FileHandler } from '../types';
 
-const renderFileRaw = (file: File, deleteFile: FileHandler) => {
+import { fileStore } from './fileStore'
+import { getDownloadLink } from '../api';
+import { FileInterface, NoProps } from '../types';
+
+const renderFileRaw = (file: FileInterface) => {
   return (
     <tr key={file.id}>
       <td>{file.name}</td>
@@ -21,7 +22,7 @@ const renderFileRaw = (file: File, deleteFile: FileHandler) => {
         <button className="btn btn-inline btn-outline-secondary">Rename</button>
         <button
           className="btn btn-inline btn-outline-danger"
-          onClick={() => deleteFile(file)}
+          onClick={() => fileStore.deleteFile(file)}
         >
           Delete
         </button>
@@ -40,40 +41,64 @@ const renderMessageRaw = (message: string) => {
   )
 }
 
-const renderFilesTable = (props: Props) => {
-  if (props.fetched) {
-    if (props.files.length > 0) {
-      return props.files.map((file) => renderFileRaw(file, props.deleteFile));
-    }
+interface State {
+  files: FileInterface[],
+  fetched: boolean,
+}
 
-    return renderMessageRaw("There is no uploaded files yet");
+export class FileTable extends React.Component<NoProps, State> {
+  constructor(props: NoProps) {
+    super(props);
+    this.state = { files: [], fetched: false };
   }
 
-  return renderMessageRaw("Loading data...");
-}
+  public componentDidMount = async () => {
+    fileStore.on('update', this.updateFiles);
+    await fileStore.refetchFiles();
+  }
 
-interface Props {
-  files: File[],
-  fetched: boolean,
-  deleteFile: FileHandler
-}
+  public componentWillUnmount = async () => {
+    fileStore.removeListener('update', this.updateFiles);
+  }
 
-export default function FileTable(props: Props) {
-  return (
-    <div className="table-responsive border rounded">
-      <table className="table table-hover table-sm mb-0">
-        <thead className="thead-dark">
-          <tr>
-            <th>Name</th>
-            <th>ID</th>
-            <th>Size</th>
-            <th>Control</th>
-          </tr>
-        </thead>
-        <tbody>
-          {renderFilesTable(props)}
-        </tbody>
-      </table>
-    </div>
-  );
+  private updateFiles = (files: FileInterface[]) => {
+    this.setState({
+      files,
+      fetched: true
+    });
+  }
+
+  private renderFilesTable = () => {
+    if (this.state.fetched) {
+      if (this.state.files.length > 0) {
+        return this.state.files.map(
+          (file) => renderFileRaw(file)
+        );
+      }
+
+      return renderMessageRaw("There is no uploaded files yet");
+    }
+
+    return renderMessageRaw("Loading data...");
+  }
+
+  render() {
+    return (
+      <div className="table-responsive border rounded">
+        <table className="table table-hover table-sm mb-0">
+          <thead className="thead-dark">
+            <tr>
+              <th>Name</th>
+              <th>ID</th>
+              <th>Size</th>
+              <th>Control</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.renderFilesTable()}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
 }

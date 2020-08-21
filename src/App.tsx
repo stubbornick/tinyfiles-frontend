@@ -1,7 +1,8 @@
 import React from 'react';
+
 import logo from './logo.svg';
 import './App.css';
-import FileModule from './FileModule';
+import { FileModule } from './FileModule';
 
 function App() {
   return (
