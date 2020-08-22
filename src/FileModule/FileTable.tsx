@@ -1,45 +1,9 @@
 import React from 'react';
-import readableFileSize from 'filesize';
-import { Download as DownloadIcon } from 'react-feather';
 
 import { fileStore } from './fileStore'
-import { getDownloadLink } from '../api';
+import { FileTableRaw } from './FileTableRaw'
+import { MessageRaw } from './MessageRaw'
 import { FileInterface, NoProps } from '../types';
-
-const renderFileRaw = (file: FileInterface) => {
-  return (
-    <tr key={file.id}>
-      <td>{file.name}</td>
-      <td>{file.id}</td>
-      <td>{readableFileSize(file.size)}</td>
-      <td>
-        <button className="btn btn-inline btn-outline-secondary">
-          <a href={getDownloadLink(file.id, file.name)}>
-            <DownloadIcon />
-            Download
-          </a>
-        </button>
-        <button className="btn btn-inline btn-outline-secondary">Rename</button>
-        <button
-          className="btn btn-inline btn-outline-danger"
-          onClick={() => fileStore.deleteFile(file)}
-        >
-          Delete
-        </button>
-      </td>
-    </tr>
-  );
-}
-
-const renderMessageRaw = (message: string) => {
-  return (
-    <tr className="text-center">
-      <td colSpan={4}>
-        {message}
-      </td>
-    </tr>
-  )
-}
 
 interface State {
   files: FileInterface[],
@@ -72,14 +36,14 @@ export class FileTable extends React.Component<NoProps, State> {
     if (this.state.fetched) {
       if (this.state.files.length > 0) {
         return this.state.files.map(
-          (file) => renderFileRaw(file)
+          (file) => (<FileTableRaw file={file}/>)
         );
       }
 
-      return renderMessageRaw("There is no uploaded files yet");
+      return (<MessageRaw message="There is no uploaded files yet" />);
     }
 
-    return renderMessageRaw("Loading data...");
+    return (<MessageRaw message="Loading data..." />);
   }
 
   render() {
