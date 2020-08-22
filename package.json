@@ -19,7 +19,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-feather": "^2.0.8",
-    "react-scripts": "3.4.1",
+    "react-scripts": "^3.4.3",
     "typescript": "~3.7.2",
     "url-join": "^4.0.1"
   },
