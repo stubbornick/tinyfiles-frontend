@@ -2,15 +2,15 @@ import React from 'react';
 import readableFileSize from 'filesize';
 import { Download as DownloadIcon } from 'react-feather';
 
-import { fileStore } from './fileStore'
+import { fileStore } from './fileStore';
 import { getDownloadLink } from '../api';
 import { FileInterface } from '../types';
 
 interface Props {
-  file: FileInterface,
+  file: FileInterface;
 }
 
-type State = Props
+type State = Props;
 
 export class FileTableRaw extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -18,7 +18,7 @@ export class FileTableRaw extends React.Component<Props, State> {
     this.state = { file: props.file };
   }
 
-  render() {
+  render(): JSX.Element {
     const { file } = this.state;
 
     return (
@@ -27,16 +27,25 @@ export class FileTableRaw extends React.Component<Props, State> {
         <td>{file.id}</td>
         <td>{readableFileSize(file.size)}</td>
         <td>
-          <button className="btn btn-inline btn-outline-secondary">
+          <button
+            className="btn btn-inline btn-outline-secondary"
+            type="button"
+          >
             <a href={getDownloadLink(file.id, file.name)}>
               <DownloadIcon />
               Download
             </a>
           </button>
-          <button className="btn btn-inline btn-outline-secondary">Rename</button>
+          <button
+            className="btn btn-inline btn-outline-secondary"
+            type="button"
+          >
+            Rename
+          </button>
           <button
             className="btn btn-inline btn-outline-danger"
-            onClick={() => fileStore.deleteFile(file)}
+            type="button"
+            onClick={(): Promise<void> => fileStore.deleteFile(file)}
           >
             Delete
           </button>

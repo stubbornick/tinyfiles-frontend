@@ -1,32 +1,30 @@
 import React from 'react';
 import { PlusCircle } from 'react-feather';
 
-import { fileStore } from "./fileStore";
+import { fileStore } from './fileStore';
 
-interface Props {
-}
-
-interface State {
-}
-
-export class FileUploader extends React.Component<Props, State> {
+export class FileUploader extends React.Component<{}, {}> {
   private fileInput = React.createRef<HTMLInputElement>();
 
-  constructor(props: Props) {
-    super(props);
+  constructor() {
+    super({});
     this.fileInput = React.createRef();
   }
 
-  private openFileSelection = () => {
+  private openFileSelection = (): void => {
     this.fileInput.current?.click();
   };
 
-  private onFileSelected = (event: any) => {
-    const file = event.target.files[0];
-    return fileStore.createAndUploadFile(file);
+  private onFileSelected = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): Promise<void> => {
+    if (event.target.files) {
+      const file = event.target.files[0];
+      await fileStore.createAndUploadFile(file);
+    }
   };
 
-  render() {
+  render(): JSX.Element {
     return (
       <div className="d-flex">
         <input
@@ -37,6 +35,7 @@ export class FileUploader extends React.Component<Props, State> {
         />
         <button
           className="btn btn-inline btn-outline-secondary"
+          type="button"
           onClick={this.openFileSelection}
           title="Upload new file"
         >

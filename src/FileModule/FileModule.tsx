@@ -4,7 +4,7 @@ import './FileModule.css';
 import { FileTable } from './FileTable';
 import { FileUploader } from './FileUploader';
 
-export function FileModule() {
+export function FileModule(): JSX.Element {
   return (
     <div className="pt-2 my-md-3 p-md-3">
       <div className="d-flex justify-content-start">

@@ -1,15 +1,15 @@
 import React from 'react';
 
 interface Props {
-  message: string
+  message: string;
 }
 
-export function MessageRaw(props: Props) {
+export function MessageRaw(props: Props): JSX.Element {
+  const { message } = props;
+
   return (
     <tr className="text-center">
-      <td colSpan={4}>
-        {props.message}
-      </td>
+      <td colSpan={4}>{message}</td>
     </tr>
-  )
+  );
 }

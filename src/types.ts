@@ -1,9 +1,7 @@
 export interface FileInterface {
-  id: string,
-  name: string,
-  size: number,
-  uploadedSize?: number,
-  uploadedAt?: Date,
+  id: string;
+  name: string;
+  size: number;
+  uploadedSize?: number;
+  uploadedAt?: Date;
 }
-
-export interface NoProps {}

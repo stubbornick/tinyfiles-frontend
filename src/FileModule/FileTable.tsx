@@ -1,52 +1,52 @@
 import React from 'react';
 
-import { fileStore } from './fileStore'
-import { FileTableRaw } from './FileTableRaw'
-import { MessageRaw } from './MessageRaw'
-import { FileInterface, NoProps } from '../types';
+import { fileStore } from './fileStore';
+import { FileTableRaw } from './FileTableRaw';
+import { MessageRaw } from './MessageRaw';
+import { FileInterface } from '../types';
 
 interface State {
-  files: FileInterface[],
-  fetched: boolean,
+  files: FileInterface[];
+  fetched: boolean;
 }
 
-export class FileTable extends React.Component<NoProps, State> {
-  constructor(props: NoProps) {
-    super(props);
+export class FileTable extends React.Component<{}, State> {
+  constructor() {
+    super({});
     this.state = { files: [], fetched: false };
   }
 
-  public componentDidMount = async () => {
+  public componentDidMount(): void {
     fileStore.on('update', this.updateFiles);
-    await fileStore.refetchFiles();
+    fileStore.refetchFiles();
   }
 
-  public componentWillUnmount = async () => {
+  public componentWillUnmount(): void {
     fileStore.removeListener('update', this.updateFiles);
   }
 
-  private updateFiles = (files: FileInterface[]) => {
+  private updateFiles = (files: FileInterface[]): void => {
     this.setState({
       files,
-      fetched: true
+      fetched: true,
     });
-  }
+  };
 
-  private renderFilesTable = () => {
-    if (this.state.fetched) {
-      if (this.state.files.length > 0) {
-        return this.state.files.map(
-          (file) => (<FileTableRaw file={file}/>)
-        );
+  private renderFilesTable = (): JSX.Element | JSX.Element[] => {
+    const { files, fetched } = this.state;
+
+    if (fetched) {
+      if (files.length > 0) {
+        return files.map((file) => <FileTableRaw file={file} />);
       }
 
-      return (<MessageRaw message="There is no uploaded files yet" />);
+      return <MessageRaw message="There is no uploaded files yet" />;
     }
 
-    return (<MessageRaw message="Loading data..." />);
-  }
+    return <MessageRaw message="Loading data..." />;
+  };
 
-  render() {
+  render(): JSX.Element {
     return (
       <div className="table-responsive border rounded">
         <table className="table table-hover table-sm mb-0">
@@ -58,9 +58,7 @@ export class FileTable extends React.Component<NoProps, State> {
               <th>Control</th>
             </tr>
           </thead>
-          <tbody>
-            {this.renderFilesTable()}
-          </tbody>
+          <tbody>{this.renderFilesTable()}</tbody>
         </table>
       </div>
     );
