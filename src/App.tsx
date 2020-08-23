@@ -2,6 +2,7 @@ import React from 'react';
 
 import logo from './logo.svg';
 import './App.css';
+import { AlertModule } from './AlertModule';
 import { FileModule } from './FileModule';
 
 export function App(): JSX.Element {
@@ -10,6 +11,8 @@ export function App(): JSX.Element {
       <header className="border-bottom">
         <h1>Tinyfiles</h1>
       </header>
+
+      <AlertModule />
 
       <div className="pt-2 my-md-3 p-md-3">
         <FileModule />
