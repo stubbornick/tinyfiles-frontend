@@ -2,8 +2,9 @@ import React from 'react';
 import { PlusCircle } from 'react-feather';
 
 import { fileStore } from './fileStore';
+import { alertStore } from '../AlertModule';
 
-export class FileUploader extends React.Component<{}, {}> {
+export class FileUploadButton extends React.Component<{}, {}> {
   private fileInput = React.createRef<HTMLInputElement>();
 
   constructor(props: {}) {
@@ -21,6 +22,7 @@ export class FileUploader extends React.Component<{}, {}> {
     if (event.target.files) {
       const file = event.target.files[0];
       await fileStore.createAndUploadFile(file);
+      alertStore.showSuccess(`File '${file.name}' was uploaded!`, 'Uploaded!');
     }
   };
 

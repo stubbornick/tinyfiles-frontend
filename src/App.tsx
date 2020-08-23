@@ -11,7 +11,9 @@ export function App(): JSX.Element {
         <h1>Tinyfiles</h1>
       </header>
 
-      <FileModule />
+      <div className="pt-2 my-md-3 p-md-3">
+        <FileModule />
+      </div>
 
       <footer className="pt-2 my-md-3 pt-md-3 border-top">
         <div className="container">
