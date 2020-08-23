@@ -25,37 +25,6 @@ const adjustChunkSize = (requestStartTime: number): void => {
   }
 };
 
-const uploadFile = async (file: File, newFileId: string): Promise<void> => {
-  for (let chunkFrom = 0; chunkFrom < file.size; ) {
-    const currentChunkSize = Math.min(file.size - chunkFrom, uploadChunkSize);
-    const chunkTo = chunkFrom + currentChunkSize;
-
-    const requestStartTime = Date.now();
-
-    // eslint-disable-next-line no-await-in-loop
-    const res = await api.patch(
-      `/files/upload/${newFileId}`,
-      file.slice(chunkFrom, chunkTo),
-      {
-        headers: {
-          'Content-Type': 'text/octet-stream',
-        },
-      }
-    );
-
-    if (res.status !== 200) {
-      console.error('Bad answer from server while uploading:', res);
-      return;
-    }
-
-    chunkFrom = chunkTo;
-
-    if (currentChunkSize === uploadChunkSize) {
-      adjustChunkSize(requestStartTime);
-    }
-  }
-};
-
 class FileStore extends EventEmitter {
   files: FileInterface[];
 
@@ -78,10 +47,10 @@ class FileStore extends EventEmitter {
     if (createResponse.status === 201) {
       const newFile = createResponse.data;
 
-      await uploadFile(file, newFile.id);
-
       this.files.push(newFile);
       this.update();
+
+      await this.uploadFile(newFile, file);
     }
   }
 
@@ -90,6 +59,46 @@ class FileStore extends EventEmitter {
 
     if (result.status === 200) {
       this.update(this.files.filter((f) => f.id !== file.id));
+    }
+  }
+
+  private async uploadFile(file: FileInterface, fileBlob: File): Promise<void> {
+    for (let chunkFrom = 0; chunkFrom < fileBlob.size; ) {
+      const currentChunkSize = Math.min(
+        fileBlob.size - chunkFrom,
+        uploadChunkSize
+      );
+      const chunkTo = chunkFrom + currentChunkSize;
+
+      const requestStartTime = Date.now();
+
+      // eslint-disable-next-line no-await-in-loop
+      const res = await api.patch<FileInterface>(
+        `/files/upload/${file.id}`,
+        fileBlob.slice(chunkFrom, chunkTo),
+        {
+          headers: {
+            'Content-Type': 'text/octet-stream',
+          },
+        }
+      );
+
+      if (res.status !== 200) {
+        console.error('Bad answer from server while uploading:', res);
+        return;
+      }
+
+      chunkFrom = chunkTo;
+
+      if (currentChunkSize === uploadChunkSize) {
+        adjustChunkSize(requestStartTime);
+      }
+
+      // eslint-disable-next-line no-param-reassign
+      file.uploadedAt = res.data.uploadedAt;
+      // eslint-disable-next-line no-param-reassign
+      file.uploadedSize = res.data.uploadedSize;
+      this.update();
     }
   }
 

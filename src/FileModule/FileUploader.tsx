@@ -6,8 +6,8 @@ import { fileStore } from './fileStore';
 export class FileUploader extends React.Component<{}, {}> {
   private fileInput = React.createRef<HTMLInputElement>();
 
-  constructor() {
-    super({});
+  constructor(props: {}) {
+    super(props);
     this.fileInput = React.createRef();
   }
 

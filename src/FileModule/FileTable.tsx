@@ -11,8 +11,8 @@ interface State {
 }
 
 export class FileTable extends React.Component<{}, State> {
-  constructor() {
-    super({});
+  constructor(props: {}) {
+    super(props);
     this.state = { files: [], fetched: false };
   }
 
@@ -37,7 +37,7 @@ export class FileTable extends React.Component<{}, State> {
 
     if (fetched) {
       if (files.length > 0) {
-        return files.map((file) => <FileTableRaw file={file} />);
+        return files.map((file) => <FileTableRaw key={file.id} file={file} />);
       }
 
       return <MessageRaw message="There is no uploaded files yet" />;
@@ -55,6 +55,7 @@ export class FileTable extends React.Component<{}, State> {
               <th>Name</th>
               <th>ID</th>
               <th>Size</th>
+              <th>Uploaded</th>
               <th>Control</th>
             </tr>
           </thead>

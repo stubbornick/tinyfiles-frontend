@@ -9,7 +9,7 @@ export function MessageRaw(props: Props): JSX.Element {
 
   return (
     <tr className="text-center">
-      <td colSpan={4}>{message}</td>
+      <td colSpan={5}>{message}</td>
     </tr>
   );
 }

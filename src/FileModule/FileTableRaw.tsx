@@ -1,7 +1,9 @@
 import React from 'react';
 import readableFileSize from 'filesize';
+import moment from 'moment';
 import { Download as DownloadIcon } from 'react-feather';
 
+import { FileUploadRaw } from './FileUploadRaw';
 import { fileStore } from './fileStore';
 import { getDownloadLink } from '../api';
 import { FileInterface } from '../types';
@@ -22,35 +24,43 @@ export class FileTableRaw extends React.Component<Props, State> {
     const { file } = this.state;
 
     return (
-      <tr key={file.id}>
-        <td>{file.name}</td>
-        <td>{file.id}</td>
-        <td>{readableFileSize(file.size)}</td>
-        <td>
-          <button
-            className="btn btn-inline btn-outline-secondary"
-            type="button"
-          >
-            <a href={getDownloadLink(file.id, file.name)}>
-              <DownloadIcon />
-              Download
-            </a>
-          </button>
-          <button
-            className="btn btn-inline btn-outline-secondary"
-            type="button"
-          >
-            Rename
-          </button>
-          <button
-            className="btn btn-inline btn-outline-danger"
-            type="button"
-            onClick={(): Promise<void> => fileStore.deleteFile(file)}
-          >
-            Delete
-          </button>
-        </td>
-      </tr>
+      <>
+        <tr>
+          <td>{file.name}</td>
+          <td>{file.id}</td>
+          <td>{readableFileSize(file.size)}</td>
+          <td>
+            {file.uploadedAt ? moment(file.uploadedAt).format('lll') : '—'}
+          </td>
+          <td className="col-3">
+            {file.uploadedAt && (
+              <button
+                className="btn btn-inline btn-outline-secondary"
+                type="button"
+              >
+                <a href={getDownloadLink(file.id, file.name)}>
+                  <DownloadIcon />
+                  Download
+                </a>
+              </button>
+            )}
+            <button
+              className="btn btn-inline btn-outline-secondary"
+              type="button"
+            >
+              Rename
+            </button>
+            <button
+              className="btn btn-inline btn-outline-danger"
+              type="button"
+              onClick={(): Promise<void> => fileStore.deleteFile(file)}
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+        {!file.uploadedAt && <FileUploadRaw file={file} />}
+      </>
     );
   }
 }
