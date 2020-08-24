@@ -8,11 +8,11 @@ import { FileModule } from './FileModule';
 export function App(): JSX.Element {
   return (
     <div className="App">
+      <AlertModule />
+
       <header className="border-bottom">
         <h1>Tinyfiles</h1>
       </header>
-
-      <AlertModule />
 
       <div className="pt-2 my-md-3 p-md-3">
         <FileModule />
@@ -21,10 +21,6 @@ export function App(): JSX.Element {
       <footer className="pt-2 my-md-3 pt-md-3 border-top">
         <div className="container">
           <div className="row">
-            <div className="col-md-6">
-              <img className="mb-2" src={logo} alt="" width="24" height="24" />
-              <small className="d-block mb-3 text-muted">&copy; 2020</small>
-            </div>
             <div className="col-md-6">
               <h5>About</h5>
               <ul className="list-unstyled text-muted">
@@ -44,6 +40,10 @@ export function App(): JSX.Element {
                   </a>
                 </li>
               </ul>
+            </div>
+            <div className="col-md-6">
+              <img className="mb-2" src={logo} alt="" width="24" height="24" />
+              <small className="d-block mb-3 text-muted">&copy; 2020</small>
             </div>
           </div>
         </div>

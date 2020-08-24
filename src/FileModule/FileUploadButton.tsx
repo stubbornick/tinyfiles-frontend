@@ -22,7 +22,7 @@ export class FileUploadButton extends React.Component<{}, {}> {
     if (event.target.files) {
       const file = event.target.files[0];
       await fileStore.createAndUploadFile(file);
-      alertStore.showSuccess(`File '${file.name}' was uploaded!`, 'Uploaded!');
+      alertStore.showSuccess(`File '${file.name}' uploaded!`);
     }
   };
 

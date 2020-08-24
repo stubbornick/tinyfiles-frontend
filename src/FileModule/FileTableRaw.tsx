@@ -24,7 +24,7 @@ export class FileTableRaw extends React.Component<Props, State> {
   delete = async (): Promise<void> => {
     const { file } = this.state;
     await fileStore.deleteFile(file);
-    alertStore.showInfo(`File '${file.name}' was deleted!`, 'Deleted!');
+    alertStore.showWarning(`File '${file.name}' deleted!`);
   };
 
   render(): JSX.Element {

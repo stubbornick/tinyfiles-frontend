@@ -31,7 +31,10 @@ export class AlertModule extends React.Component<{}, State> {
     const { alerts } = this.state;
 
     return (
-      <div id="notification-container" className="d-flex flex-column p-4">
+      <div
+        id="notification-container"
+        className="d-flex flex-column align-items-end mx-4"
+      >
         {alerts.map((alert) => (
           <Alert key={alert.id} alert={alert} />
         ))}

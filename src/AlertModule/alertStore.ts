@@ -10,23 +10,23 @@ class AlertStore extends EventEmitter {
     this.alerts = [];
   }
 
-  public showSuccess(message: string, title: string | undefined): void {
+  public showSuccess(message: string, title?: string): void {
     this.addAlert('success', message, title);
   }
 
-  public showInfo(message: string, title: string | undefined): void {
+  public showInfo(message: string, title?: string): void {
     this.addAlert('info', message, title);
   }
 
-  public showError(message: string, title: string | undefined): void {
+  public showWarning(message: string, title?: string): void {
+    this.addAlert('warning', message, title);
+  }
+
+  public showError(message: string, title?: string): void {
     this.addAlert('danger', message, title);
   }
 
-  private addAlert(
-    type: AlertType,
-    message: string,
-    title: string | undefined
-  ): void {
+  private addAlert(type: AlertType, message: string, title?: string): void {
     this.alerts.push({
       id: Math.round(Math.random() * Number.MAX_SAFE_INTEGER),
       type,
