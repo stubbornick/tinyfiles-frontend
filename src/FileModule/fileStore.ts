@@ -51,6 +51,7 @@ class FileStore extends EventEmitter {
       this.update();
 
       await this.uploadFile(newFile, file);
+      this.emit('uploaded', newFile);
     }
   }
 
@@ -59,6 +60,7 @@ class FileStore extends EventEmitter {
 
     if (result.status === 200) {
       this.update(this.files.filter((f) => f.id !== file.id));
+      this.emit('deleted', file);
     }
   }
 

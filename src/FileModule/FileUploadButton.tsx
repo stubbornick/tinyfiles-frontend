@@ -2,7 +2,6 @@ import React from 'react';
 import { PlusCircle } from 'react-feather';
 
 import { fileStore } from './fileStore';
-import { alertStore } from '../AlertModule';
 
 export class FileUploadButton extends React.Component<{}, {}> {
   private fileInput = React.createRef<HTMLInputElement>();
@@ -16,13 +15,12 @@ export class FileUploadButton extends React.Component<{}, {}> {
     this.fileInput.current?.click();
   };
 
-  private onFileSelected = async (
+  private onFileSelected = (
     event: React.ChangeEvent<HTMLInputElement>
-  ): Promise<void> => {
+  ): void => {
     if (event.target.files) {
       const file = event.target.files[0];
-      await fileStore.createAndUploadFile(file);
-      alertStore.showSuccess(`File '${file.name}' uploaded!`);
+      fileStore.createAndUploadFile(file);
     }
   };
 

@@ -6,7 +6,6 @@ import { Download as DownloadIcon } from 'react-feather';
 import { FileUploadRaw } from './FileUploadRaw';
 import { fileStore } from './fileStore';
 import { getDownloadLink } from '../api';
-import { alertStore } from '../AlertModule';
 import { FileInterface } from '../types';
 
 interface Props {
@@ -21,10 +20,9 @@ export class FileTableRaw extends React.Component<Props, State> {
     this.state = { file: props.file };
   }
 
-  delete = async (): Promise<void> => {
+  delete = (): void => {
     const { file } = this.state;
-    await fileStore.deleteFile(file);
-    alertStore.showWarning(`File '${file.name}' deleted!`);
+    fileStore.deleteFile(file);
   };
 
   render(): JSX.Element {
