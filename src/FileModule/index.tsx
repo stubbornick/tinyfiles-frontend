@@ -1,1 +1,1 @@
-export { FileModule } from './FileModule';
+export { FileModule, onFileDrop } from './FileModule';

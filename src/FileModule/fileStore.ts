@@ -55,6 +55,14 @@ class FileStore extends EventEmitter {
     }
   }
 
+  public createAndUploadFiles(files: FileList): Promise<void>[] {
+    const promises = [];
+    for (let i = 0; i < files.length; i += 1) {
+      promises.push(this.createAndUploadFile(files[i]));
+    }
+    return promises;
+  }
+
   public async deleteFile(file: FileInterface): Promise<void> {
     const result = await api.delete(`/files/${file.id}`);
 
@@ -104,7 +112,7 @@ class FileStore extends EventEmitter {
     }
   }
 
-  private update(files: FileInterface[] | null = null): void {
+  private update(files?: FileInterface[]): void {
     if (files) {
       this.files = files;
     }

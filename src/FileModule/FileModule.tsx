@@ -15,6 +15,12 @@ const onFileDeleted = (file: FileInterface): void => {
   alertStore.showWarning(`File '${file.name}' deleted!`);
 };
 
+export const onFileDrop = (event: React.DragEvent<HTMLDivElement>): void => {
+  event.preventDefault();
+  event.stopPropagation();
+  fileStore.createAndUploadFiles(event.dataTransfer.files);
+};
+
 export class FileModule extends React.Component<{}, {}> {
   public componentDidMount(): void {
     fileStore.on('uploaded', onFileUploaded);

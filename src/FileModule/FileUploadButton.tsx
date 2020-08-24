@@ -19,8 +19,7 @@ export class FileUploadButton extends React.Component<{}, {}> {
     event: React.ChangeEvent<HTMLInputElement>
   ): void => {
     if (event.target.files) {
-      const file = event.target.files[0];
-      fileStore.createAndUploadFile(file);
+      fileStore.createAndUploadFiles(event.target.files);
     }
   };
 
@@ -32,6 +31,7 @@ export class FileUploadButton extends React.Component<{}, {}> {
           className="d-none"
           onChange={this.onFileSelected}
           ref={this.fileInput}
+          multiple
         />
         <button
           className="btn btn-inline btn-outline-secondary"

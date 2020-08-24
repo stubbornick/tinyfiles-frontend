@@ -3,11 +3,16 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { AlertModule } from './AlertModule';
-import { FileModule } from './FileModule';
+import { FileModule, onFileDrop } from './FileModule';
+
+const nopeHandler = (e: React.SyntheticEvent): void => {
+  e.preventDefault();
+  e.stopPropagation();
+};
 
 export function App(): JSX.Element {
   return (
-    <div className="App">
+    <div className="App" onDragOver={nopeHandler} onDrop={onFileDrop}>
       <AlertModule />
 
       <header className="border-bottom">
