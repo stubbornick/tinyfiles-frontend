@@ -25,7 +25,6 @@ export class FileModule extends React.Component<{}, {}> {
   public componentDidMount(): void {
     fileStore.on('uploaded', onFileUploaded);
     fileStore.on('deleted', onFileDeleted);
-    fileStore.refetchFiles();
   }
 
   public componentWillUnmount(): void {
