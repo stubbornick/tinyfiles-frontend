@@ -43,5 +43,6 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'import/no-default-export': 'error',
     'no-console': ['warn', { allow: ['warn', 'error'] }],
+    'no-param-reassign': 'off',
   },
 };

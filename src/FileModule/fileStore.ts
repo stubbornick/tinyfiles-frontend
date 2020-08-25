@@ -34,8 +34,13 @@ class FileStore extends EventEmitter {
   }
 
   public async refetchFiles(): Promise<void> {
-    const result = await api.get('/files');
-    this.update(result.data);
+    const result = await api.get<FileInterface[]>('/files');
+    this.update(
+      result.data.map((file) => {
+        file.uploading = false;
+        return file;
+      })
+    );
   }
 
   public async createAndUploadFile(file: File): Promise<void> {
@@ -46,12 +51,14 @@ class FileStore extends EventEmitter {
 
     if (createResponse.status === 201) {
       const newFile = createResponse.data;
+      newFile.fileObject = file;
 
       this.files.push(newFile);
       this.update();
 
-      await this.uploadFile(newFile, file);
-      this.emit('uploaded', newFile);
+      if (await this.uploadFile(newFile)) {
+        this.emit('uploaded', newFile);
+      }
     }
   }
 
@@ -72,10 +79,22 @@ class FileStore extends EventEmitter {
     }
   }
 
-  private async uploadFile(file: FileInterface, fileBlob: File): Promise<void> {
-    for (let chunkFrom = 0; chunkFrom < fileBlob.size; ) {
+  public async uploadFile(file: FileInterface): Promise<boolean> {
+    if (!file.fileObject) {
+      throw new Error('Uploding: cannot find fileObject!');
+    }
+
+    const { fileObject } = file;
+
+    file.uploading = true;
+
+    for (let chunkFrom = file.uploadedSize; chunkFrom < fileObject.size; ) {
+      if (!file.uploading) {
+        return false;
+      }
+
       const currentChunkSize = Math.min(
-        fileBlob.size - chunkFrom,
+        fileObject.size - chunkFrom,
         uploadChunkSize
       );
       const chunkTo = chunkFrom + currentChunkSize;
@@ -85,7 +104,7 @@ class FileStore extends EventEmitter {
       // eslint-disable-next-line no-await-in-loop
       const res = await api.patch<FileInterface>(
         `/files/upload/${file.id}`,
-        fileBlob.slice(chunkFrom, chunkTo),
+        fileObject.slice(chunkFrom, chunkTo),
         {
           headers: {
             'Content-Type': 'text/octet-stream',
@@ -95,21 +114,25 @@ class FileStore extends EventEmitter {
 
       if (res.status !== 200) {
         console.error('Bad answer from server while uploading:', res);
-        return;
+        file.uploading = false;
+        return false;
       }
-
-      chunkFrom = chunkTo;
 
       if (currentChunkSize === uploadChunkSize) {
         adjustChunkSize(requestStartTime);
       }
 
-      // eslint-disable-next-line no-param-reassign
       file.uploadedAt = res.data.uploadedAt;
-      // eslint-disable-next-line no-param-reassign
       file.uploadedSize = res.data.uploadedSize;
+
       this.update();
+
+      chunkFrom = chunkTo;
     }
+
+    file.uploading = false;
+
+    return true;
   }
 
   private update(files?: FileInterface[]): void {

@@ -2,7 +2,9 @@ export interface FileInterface {
   id: string;
   name: string;
   size: number;
-  uploadedSize?: number;
+  fileObject: File;
+  uploading: boolean;
+  uploadedSize: number;
   uploadedAt?: Date;
 }
 
