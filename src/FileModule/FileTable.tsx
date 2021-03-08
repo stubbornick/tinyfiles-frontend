@@ -10,8 +10,8 @@ interface State {
   fetched: boolean;
 }
 
-export class FileTable extends React.Component<{}, State> {
-  constructor(props: {}) {
+export class FileTable extends React.Component<Record<string, unknown>, State> {
+  constructor(props: Record<string, unknown>) {
     super(props);
     this.state = { files: [], fetched: false };
   }

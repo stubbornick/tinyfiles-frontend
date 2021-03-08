@@ -21,7 +21,10 @@ export const onFileDrop = (event: React.DragEvent<HTMLDivElement>): void => {
   fileStore.createAndUploadFiles(event.dataTransfer.files);
 };
 
-export class FileModule extends React.Component<{}, {}> {
+export class FileModule extends React.Component<
+  Record<string, unknown>,
+  Record<string, unknown>
+> {
   public componentDidMount(): void {
     fileStore.on('uploaded', onFileUploaded);
     fileStore.on('deleted', onFileDeleted);

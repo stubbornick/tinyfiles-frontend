@@ -9,8 +9,11 @@ interface State {
   alerts: AlertInterface[];
 }
 
-export class AlertModule extends React.Component<{}, State> {
-  constructor(props: {}) {
+export class AlertModule extends React.Component<
+  Record<string, unknown>,
+  State
+> {
+  constructor(props: Record<string, unknown>) {
     super(props);
     this.state = { alerts: [] };
   }

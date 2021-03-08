@@ -3,10 +3,13 @@ import { PlusCircle } from 'react-feather';
 
 import { fileStore } from './fileStore';
 
-export class FileUploadButton extends React.Component<{}, {}> {
+export class FileUploadButton extends React.Component<
+  Record<string, unknown>,
+  Record<string, unknown>
+> {
   private fileInput = React.createRef<HTMLInputElement>();
 
-  constructor(props: {}) {
+  constructor(props: Record<string, unknown>) {
     super(props);
     this.fileInput = React.createRef();
   }
